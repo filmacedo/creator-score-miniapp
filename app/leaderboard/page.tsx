@@ -29,7 +29,7 @@ import {
   PERK_DRAW_DEADLINE_UTC,
   PERK_DRAW_DATE_UTC,
 } from "@/lib/constants";
-import { PageContainer } from "@/components/common/PageContainer";
+
 import { Section } from "@/components/common/Section";
 import { Callout } from "@/components/common/Callout";
 import { CalloutCarousel } from "@/components/common/CalloutCarousel";
@@ -758,15 +758,8 @@ function LeaderboardContent() {
 
 export default function LeaderboardPage() {
   return (
-    <>
-      {/* Header section */}
-      <PageContainer noPadding>
-        <Section variant="header">
-          <Suspense fallback={<Skeleton className="h-16 w-full" />}>
-            <LeaderboardContent />
-          </Suspense>
-        </Section>
-      </PageContainer>
-    </>
+    <Suspense fallback={<Skeleton className="h-16 w-full" />}>
+      <LeaderboardContent />
+    </Suspense>
   );
 }
