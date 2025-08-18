@@ -450,7 +450,7 @@ function LeaderboardContent() {
         />
       </div>
 
-      {/* Full width tabs */}
+      {/* Full width tabs - outside PageContainer constraints */}
       <Section variant="full-width">
         <div className="w-full border-b border-border bg-background">
           <TabNavigation
@@ -758,13 +758,15 @@ function LeaderboardContent() {
 
 export default function LeaderboardPage() {
   return (
-    <PageContainer noPadding>
+    <>
       {/* Header section */}
-      <Section variant="header">
-        <Suspense fallback={<Skeleton className="h-16 w-full" />}>
-          <LeaderboardContent />
-        </Suspense>
-      </Section>
-    </PageContainer>
+      <PageContainer noPadding>
+        <Section variant="header">
+          <Suspense fallback={<Skeleton className="h-16 w-full" />}>
+            <LeaderboardContent />
+          </Suspense>
+        </Section>
+      </PageContainer>
+    </>
   );
 }
