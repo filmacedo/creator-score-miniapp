@@ -332,8 +332,12 @@ function LeaderboardContent() {
                 icon: <HandHeart className="h-4 w-4" />,
                 title: "Pay It Forward",
                 description: "Give your rewards, keep your rank.",
-                href: isLoggedIn ? "/settings?section=pay-it-forward" : undefined,
-                onClick: !isLoggedIn ? () => setLoginModalOpen(true) : undefined,
+                href: isLoggedIn
+                  ? "/settings?section=pay-it-forward"
+                  : undefined,
+                onClick: !isLoggedIn
+                  ? () => setLoginModalOpen(true)
+                  : undefined,
                 dismissKey: "optout_callout_dismissed",
                 onClose: () => {
                   try {
