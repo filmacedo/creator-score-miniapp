@@ -80,7 +80,7 @@ function SettingsContent() {
 
   if (loading || !accounts || !settings || humanityCredentials === null) {
     return (
-      <PageContainer noPadding>
+      <PageContainer>
         <Section variant="content">
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
@@ -94,7 +94,7 @@ function SettingsContent() {
 
   if (error) {
     return (
-      <PageContainer noPadding>
+      <PageContainer>
         <Section variant="content">
           <Callout>
             <strong>Error loading settings:</strong> {error}
@@ -126,7 +126,7 @@ function SettingsContent() {
   };
 
   return (
-    <PageContainer noPadding>
+    <PageContainer>
       {/* Header section */}
       <Section variant="header">
         <h1 className="text-xl font-semibold">Settings</h1>
