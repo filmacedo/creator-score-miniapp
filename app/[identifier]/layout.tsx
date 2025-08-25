@@ -22,8 +22,10 @@ import { CACHE_KEYS, CACHE_DURATION_30_MINUTES } from "@/lib/cache-keys";
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: { identifier: string };
+  searchParams?: { share?: string };
 }): Promise<Metadata> {
   if (RESERVED_WORDS.includes(params.identifier)) {
     return {
@@ -144,20 +146,40 @@ export async function generateMetadata({
 
     // Always use canonical URL for Open Graph metadata (not localhost)
     const canonicalUrl = "https://creatorscore.app";
-    const dynamicImageUrl = `${canonicalUrl}/api/share-image/${user.id}`;
+    
+    // Determine content based on sharing context
+    const shareType = searchParams?.share;
+    const isOptout = shareType === 'optout';
+    
+    // Select appropriate image URL and content
+    const dynamicImageUrl = isOptout 
+      ? `${canonicalUrl}/api/share-image-optout/${user.id}`
+      : `${canonicalUrl}/api/share-image/${user.id}`;
+      
+    const title = isOptout 
+      ? `${displayName} - Paid It Forward`
+      : `${displayName} - Creator Score`;
+      
+    const description = isOptout
+      ? `${displayName} paid forward 100% of their Creator Score rewards to support onchain creators.`
+      : `Creator Score: ${creatorScore.toLocaleString()} • Total Earnings: ${formatNumberWithSuffix(totalEarnings)} • ${formatCompactNumber(totalFollowers)} total followers`;
+      
+    const altText = isOptout 
+      ? `${displayName} Paid It Forward`
+      : `${displayName} Creator Score Card`;
 
     return {
-      title: `${displayName} - Creator Score`,
-      description: `Creator Score: ${creatorScore.toLocaleString()} • Total Earnings: ${formatNumberWithSuffix(totalEarnings)} • ${formatCompactNumber(totalFollowers)} total followers`,
+      title,
+      description,
       openGraph: {
-        title: `${displayName} - Creator Score`,
-        description: `Creator Score: ${creatorScore.toLocaleString()} • Total Earnings: ${formatNumberWithSuffix(totalEarnings)} • ${formatCompactNumber(totalFollowers)} total followers`,
+        title,
+        description,
         images: [
           {
             url: dynamicImageUrl,
             width: 1600,
             height: 900,
-            alt: `${displayName} Creator Score Card`,
+            alt: altText,
           },
         ],
         type: "website",
@@ -165,8 +187,8 @@ export async function generateMetadata({
       },
       twitter: {
         card: "summary_large_image",
-        title: `${displayName} - Creator Score`,
-        description: `Creator Score: ${creatorScore.toLocaleString()} • Total Earnings: ${formatNumberWithSuffix(totalEarnings)} • ${formatCompactNumber(totalFollowers)} total followers`,
+        title,
+        description,
         images: [dynamicImageUrl],
       },
       // Add Farcaster frame metadata for profile pages
